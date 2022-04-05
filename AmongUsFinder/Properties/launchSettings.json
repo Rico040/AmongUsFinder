@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "AmongUsExtractor": {
+      "commandName": "Project",
+      "commandLineArgs": "D:\\RPlace2022.png"
+    }
+  }
+}
