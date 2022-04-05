@@ -56,6 +56,15 @@ namespace AmongUsExtractor
             { 'x', 'a', 'x', 'a' }
         };
 
+        private Char[,] otherAltLongSusGuy =
+        {
+            { 'x', 'a', 'a', 'a' },
+            { 'a', 'a', 'b', 'c' },
+            { 'a', 'a', 'a', 'a' },
+            { 'a', 'a', 'a', 'a' },
+            { 'x', 'a', 'x', 'a' }
+        };
+
         private List<Char[,]> allGuys = new List<Char[,]>();
 
         private Bitmap alteredBitmap;
@@ -115,7 +124,21 @@ namespace AmongUsExtractor
                 guy = RotateGuyCCW(guy);
             }
 
-            guy = MirrorGuy(longSusGuy);
+            guy = MirrorGuy(altLongSusGuy);
+            for (Int32 i = 0; i < 4; i++)
+            {
+                allGuys.Add(guy);
+                guy = RotateGuyCCW(guy);
+            }
+
+            guy = otherAltLongSusGuy;
+            for (Int32 i = 0; i < 4; i++)
+            {
+                allGuys.Add(guy);
+                guy = RotateGuyCCW(guy);
+            }
+
+            guy = MirrorGuy(otherAltLongSusGuy);
             for (Int32 i = 0; i < 4; i++)
             {
                 allGuys.Add(guy);
@@ -143,7 +166,7 @@ namespace AmongUsExtractor
                 guy = RotateGuyCCW(guy);
             }
 
-            guy = MirrorGuy(shortSusGuy);
+            guy = MirrorGuy(altShortSusGuy);
             for (Int32 i = 0; i < 4; i++)
             {
                 allGuys.Add(guy);
