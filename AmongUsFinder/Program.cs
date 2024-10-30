@@ -18,9 +18,25 @@ namespace AmongUsExtractor
     {
         static void Main(string[] args)
         {
-            Sus sus = new Sus(@"D:\RPlace2022.png");
+            if (args.Length == 0)
+            {
+                Console.WriteLine("Usage: AmongUsFinder <path-to-image>");
+                return;
+            }
 
-            sus.FindSus();
+            try
+            {
+                string imagePath = args[0];
+                Sus sus = new Sus(imagePath);
+                // Console.WriteLine($"Processing image: {imagePath}");
+                sus.FindSus();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                Environment.Exit(1);
+            }
         }
     }
 }
+

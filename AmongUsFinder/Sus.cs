@@ -13,68 +13,495 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
-using System.Text;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace AmongUsExtractor
 {
     class Sus
     {
-        private Char[,] shortSusGuy =
-        {
-            { 'x', 'a', 'a', 'a' },
-            { 'a', 'a', 'b', 'c' },
-            { 'a', 'a', 'a', 'a' },
-            { 'x', 'a', 'x', 'a' }
-        };
+        private readonly char[][,] susGuys =
+        [
+            new char[,]
+            {
+                { 'x', 'a', 'a', 'a' },
+                { 'a', 'a', 'b', 'c' },
+                { 'a', 'a', 'a', 'a' },
+                { 'x', 'a', 'x', 'a' }
+            },
 
-        private Char[,] longSusGuy =
-        {
-            { 'x', 'a', 'a', 'a' },
-            { 'a', 'a', 'b', 'c' },
-            { 'a', 'a', 'a', 'a' },
-            { 'x', 'a', 'a', 'a' },
-            { 'x', 'a', 'x', 'a' }
-        };
+            new char[,]
+            {
+                { 'x', 'a', 'a', 'a', 'a', 'a', 'x' },
+                { 'a', 'a', 'b', 'c', 'b', 'a', 'a' },
+                { 'a', 'a', 'a', 'a', 'a', 'a', 'a' },
+                { 'x', 'a', 'x', 'a', 'x', 'a', 'x' }
+            },
 
-        private Char[,] altShortSusGuy =
-        {
-            { 'x', 'a', 'a', 'a' },
-            { 'a', 'a', 'b', 'c' },
-            { 'x', 'a', 'a', 'a' },
-            { 'x', 'a', 'x', 'a' }
-        };
+            new char[,]
+            {
+                { 'x', 'a', 'a', 'a' },
+                { 'a', 'a', 'b', 'c' },
+                { 'a', 'a', 'a', 'a' },
+                { 'x', 'a', 'a', 'a' },
+                { 'x', 'a', 'x', 'a' }
+            },
 
-        private Char[,] altLongSusGuy =
-        {
-            { 'x', 'a', 'a', 'a' },
-            { 'a', 'a', 'b', 'c' },
-            { 'x', 'a', 'a', 'a' },
-            { 'x', 'a', 'a', 'a' },
-            { 'x', 'a', 'x', 'a' }
-        };
+            new char[,]
+            {
+                { 'x', 'a', 'c', 'a' },
+                { 'a', 'c', 'b', 'b' },
+                { 'c', 'a', 'c', 'a' },
+                { 'x', 'c', 'x', 'c' }
+            },
 
-        private Char[,] otherAltLongSusGuy =
-        {
-            { 'x', 'a', 'a', 'a' },
-            { 'a', 'a', 'b', 'c' },
-            { 'a', 'a', 'a', 'a' },
-            { 'a', 'a', 'a', 'a' },
-            { 'x', 'a', 'x', 'a' }
-        };
+            new char[,]
+            {
+                { 'x', 'a', 'c', 'a' },
+                { 'a', 'c', 'b', 'b' },
+                { 'c', 'a', 'c', 'a' },
+                { 'x', 'c', 'a', 'c' },
+                { 'x', 'a', 'x', 'a' }
+            },
 
-        private List<Char[,]> allGuys = new List<Char[,]>();
+            new char[,]
+            {
+                { 'x', 'a', 'a', 'a' },
+                { 'c', 'c', 'b', 'b' },
+                { 'a', 'a', 'a', 'a' },
+                { 'x', 'c', 'c', 'c' },
+                { 'x', 'a', 'x', 'a' }
+            },
+
+            new char[,]
+            {
+                { 'x', 'a', 'a', 'a' },
+                { 'c', 'a', 'b', 'b' },
+                { 'c', 'a', 'a', 'a' },
+                { 'x', 'a', 'x', 'a' }
+            },
+
+            new char[,]
+            {
+                { 'x', 'a', 'a', 'a', 'a' },
+                { 'a', 'a', 'a', 'b', 'c' },
+                { 'a', 'a', 'a', 'a', 'a' },
+                { 'x', 'a', 'x', 'x', 'a' }
+            },
+
+            new char[,]
+            {
+                { 'x', 'a', 'a', 'a', 'a' },
+                { 'c', 'c', 'c', 'b', 'b' },
+                { 'a', 'a', 'a', 'a', 'a' },
+                { 'x', 'c', 'x', 'x', 'c' }
+            },
+
+            new char[,]
+            {
+                { 'x', 'a', 'a', 'a' },
+                { 'c', 'c', 'b', 'b' },
+                { 'a', 'a', 'a', 'a' },
+                { 'x', 'c', 'x', 'c' }
+            },
+
+            new char[,]
+            {
+                { 'x', 'c', 'a', 'c' },
+                { 'a', 'c', 'b', 'b' },
+                { 'a', 'c', 'a', 'c' },
+                { 'x', 'c', 'x', 'c' }
+            },
+
+            new char[,]
+            {
+                { 'a', 'a', 'a', 'a' },
+                { 'a', 'b', 'c', 'a' },
+                { 'a', 'a', 'a', 'a' },
+                { 'a', 'x', 'x', 'a' }
+            },
+
+            new char[,]
+            {
+                { 'a', 'a', 'a', 'a' },
+                { 'c', 'b', 'b', 'c' },
+                { 'a', 'a', 'a', 'a' },
+                { 'c', 'x', 'x', 'c' }
+            },
+
+            new char[,]
+            {
+                { 'a', 'c', 'a', 'c' },
+                { 'c', 'b', 'b', 'a' },
+                { 'a', 'c', 'a', 'c' },
+                { 'c', 'x', 'x', 'a' }
+            },
+
+            new char[,]
+            {
+                { 'x', 'c', 'a', 'c', 'a' },
+                { 'c', 'a', 'c', 'b', 'b' },
+                { 'a', 'c', 'a', 'c', 'a' },
+                { 'x', 'a', 'x', 'x', 'c' }
+            },
+
+            new char[,]
+            { 
+                { 'x', 'a', 'a', 'a', 'a', 'a' },
+                { 'a', 'a', 'a', 'b', 'c', 'a' },
+                { 'a', 'a', 'a', 'a', 'a', 'a' },
+                { 'a', 'a', 'a', 'a', 'a', 'a' },
+                { 'x', 'a', 'x', 'x', 'x', 'a' },
+            },
+
+            new char[,]
+            {
+                { 'x', 'a', 'a', 'a', 'a', 'a' },
+                { 'c', 'c', 'c', 'b', 'b', 'c' },
+                { 'a', 'a', 'a', 'a', 'a', 'a' },
+                { 'c', 'c', 'c', 'c', 'c', 'c' },
+                { 'x', 'a', 'x', 'x', 'x', 'a' }
+            },
+
+            new char[,]
+            {
+                { 'x', 'a', 'c', 'a', 'c', 'a' },
+                { 'a', 'c', 'a', 'b', 'b', 'c' },
+                { 'c', 'a', 'c', 'a', 'c', 'a' },
+                { 'a', 'c', 'a', 'c', 'a', 'c' },
+                { 'x', 'a', 'x', 'x', 'x', 'a' }
+            },
+
+            new char[,]
+            {
+                { 'x', 'a', 'a'},
+                { 'a', 'b', 'c'},
+                { 'a', 'x', 'a'}
+            },
+
+            new char[,]
+            {
+                { 'x', 'a', 'a', 'a' },
+                { 'a', 'a', 'b', 'c' },
+                { 'a', 'a', 'a', 'x' },
+                { 'a', 'x', 'a', 'x' }
+            },
+
+            new char[,]
+            {
+                { 'x', 'a', 'c', 'a' },
+                { 'a', 'c', 'b', 'b' },
+                { 'c', 'a', 'c', 'x' },
+                { 'a', 'x', 'a', 'x' }
+            },
+
+            new char[,]
+            {
+                { 'x', 'x', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'x', 'x' },
+                { 'x', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'x' },
+                { 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'b', 'c', 'a' },
+                { 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a' },
+                { 'a', 'x', 'a', 'x', 'a', 'x', 'a', 'x', 'a', 'x', 'a' }
+            },
+
+            new char[,]
+            {
+                { 'x', 'x', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'x', 'x' },
+                { 'x', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'x' },
+                { 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'b', 'b', 'a' },
+                { 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a' },
+                { 'a', 'x', 'a', 'x', 'a', 'x', 'a', 'x', 'a', 'x', 'a' }
+            },
+
+            new char[,]
+            {
+                { 'x', 'x', 'x', 'x', 'x', 'a', 'x', 'a' },
+                { 'x', 'x', 'x', 'x', 'x', 'a', 'a', 'a' },
+                { 'x', 'x', 'x', 'x', 'a', 'a', 'b', 'c' },
+                { 'x', 'x', 'a', 'a', 'a', 'a', 'a', 'a' },
+                { 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'x' }
+            },
+
+            new char[,]
+            {
+                { 'x', 'x', 'x', 'x', 'x', 'a', 'x', 'a' },
+                { 'x', 'x', 'x', 'x', 'x', 'c', 'a', 'c' },
+                { 'x', 'x', 'x', 'x', 'c', 'a', 'b', 'b' },
+                { 'x', 'x', 'a', 'c', 'a', 'c', 'a', 'c' },
+                { 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'x' }
+            },
+
+            new char[,]
+            {
+                { 'x', 'x', 'a', 'a', 'a', 'x', 'x' },
+                { 'x', 'a', 'a', 'a', 'a', 'a', 'x' },
+                { 'a', 'a', 'a', 'a', 'b', 'c', 'a' },
+                { 'a', 'a', 'a', 'a', 'a', 'a', 'a' },
+                { 'a', 'x', 'a', 'x', 'a', 'x', 'a' }
+            },
+
+            new char[,]
+            {
+                { 'x', 'x', 'a', 'c', 'a', 'x', 'x' },
+                { 'x', 'a', 'c', 'a', 'c', 'a', 'x' },
+                { 'a', 'c', 'a', 'c', 'b', 'b', 'a' },
+                { 'a', 'c', 'a', 'c', 'a', 'c', 'a' },
+                { 'a', 'x', 'a', 'x', 'a', 'x', 'a' }
+            },
+
+            new char[,]
+            {
+                { 'x', 'x', 'a', 'c', 'a', 'c', 'a', 'x', 'x' },
+                { 'x', 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'x' },
+                { 'a', 'c', 'a', 'c', 'a', 'c', 'b', 'b', 'a' },
+                { 'a', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'a' },
+                { 'a', 'x', 'a', 'x', 'a', 'x', 'a', 'x', 'a' }
+            },
+
+            new char[,]
+            {
+                { 'x', 'x', 'a', 'a', 'a', 'a', 'a', 'x', 'x' },
+                { 'x', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'x' },
+                { 'a', 'a', 'a', 'a', 'a', 'a', 'b', 'c', 'a' },
+                { 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a' },
+                { 'a', 'x', 'a', 'x', 'a', 'x', 'a', 'x', 'a' }
+            },
+
+            new char[,]
+            {
+                { 'x', 'a', 'a', 'a' },
+                { 'a', 'a', 'b', 'c' },
+                { 'a', 'a', 'a', 'a' },
+                { 'x', 'a', 'a', 'a' },
+                { 'x', 'a', 'a', 'a' },
+                { 'x', 'a', 'x', 'a' },
+            },
+
+            new char[,]
+            {
+                { 'x', 'a', 'a', 'a' },
+                { 'a', 'a', 'b', 'c' },
+                { 'a', 'a', 'a', 'a' },
+                { 'x', 'a', 'a', 'a' },
+                { 'x', 'a', 'a', 'a' },
+                { 'x', 'a', 'a', 'a' },
+                { 'x', 'a', 'x', 'a' },
+            },
+
+            new char[,]
+            {
+                { 'x', 'a', 'a', 'a' },
+                { 'c', 'c', 'b', 'b' },
+                { 'a', 'a', 'a', 'a' },
+                { 'x', 'c', 'c', 'c' },
+                { 'x', 'a', 'a', 'a' },
+                { 'x', 'c', 'c', 'c' },
+                { 'x', 'a', 'x', 'a' },
+            },
+
+            new char[,]
+            {
+                { 'x', 'a', 'a', 'a' },
+                { 'c', 'c', 'b', 'b' },
+                { 'a', 'a', 'a', 'a' },
+                { 'x', 'c', 'c', 'c' },
+                { 'x', 'a', 'a', 'a' },
+                { 'x', 'c', 'x', 'c' },
+            },
+
+            new char[,]
+            {
+                { 'x', 'a', 'c', 'a' },
+                { 'a', 'c', 'b', 'b' },
+                { 'c', 'a', 'c', 'a' },
+                { 'x', 'c', 'a', 'c' },
+                { 'x', 'a', 'c', 'a' },
+                { 'x', 'c', 'x', 'c' },
+            },
+
+            new char[,]
+            {
+                { 'x', 'a', 'c', 'a' },
+                { 'a', 'c', 'b', 'b' },
+                { 'c', 'a', 'c', 'a' },
+                { 'x', 'c', 'a', 'c' },
+                { 'x', 'a', 'c', 'a' },
+                { 'x', 'c', 'a', 'c' },
+                { 'x', 'a', 'x', 'a' }
+            },
+
+            new char[,]
+            {
+                { 'x', 'a', 'a', 'a' },
+                { 'a', 'a', 'b', 'c' },
+                { 'a', 'a', 'a', 'a' },
+                { 'a', 'a', 'a', 'a' },
+                { 'a', 'a', 'x', 'a' },
+                { 'a', 'a', 'a', 'a' },
+                { 'x', 'a', 'x', 'a' }
+            },
+
+            new char[,]
+            {
+                { 'x', 'a', 'a', 'a', 'a', 'a', 'a' },
+                { 'c', 'c', 'c', 'c', 'c', 'b', 'b' },
+                { 'a', 'a', 'a', 'a', 'a', 'a', 'a' },
+                { 'x', 'c', 'x', 'x', 'x', 'x', 'c' }
+            },
+
+            new char[,]
+            {
+                { 'x', 'a', 'a', 'a', 'a', 'a' },
+                { 'c', 'c', 'c', 'c', 'b', 'b' },
+                { 'a', 'a', 'a', 'a', 'a', 'a' },
+                { 'x', 'c', 'x', 'x', 'x', 'c' }
+            },
+
+            new char[,]
+            {
+                { 'x', 'c', 'a', 'c', 'a', 'c' },
+                { 'c', 'a', 'c', 'a', 'b', 'b' },
+                { 'a', 'c', 'a', 'c', 'a', 'c' },
+                { 'x', 'a', 'x', 'x', 'x', 'a' }
+            },
+
+            new char[,]
+            {
+                { 'x', 'a', 'a', 'a', 'a', 'a', 'a' },
+                { 'a', 'a', 'a', 'a', 'a', 'b', 'c' },
+                { 'a', 'a', 'a', 'a', 'a', 'a', 'a' },
+                { 'x', 'a', 'x', 'x', 'x', 'x', 'a' }
+            },
+
+            new char[,]
+            {
+                { 'x', 'b', 'x', 'b' },
+                { 'x', 'x', 'c', 'x' },
+                { 'a', 'a', 'a', 'a' },
+                { 'a', 'a', 'a', 'a' },
+                { 'x', 'a', 'x', 'a' }
+            },
+
+            new char[,]
+            {
+                { 'x', 'b', 'x', 'b' },
+                { 'x', 'x', 'b', 'x' },
+                { 'c', 'a', 'c', 'a' },
+                { 'a', 'c', 'a', 'c' },
+                { 'x', 'a', 'x', 'a' }
+            },
+
+            new char[,]
+            {
+                { 'x', 'x', 'x', 'a', 'x', 'x' },
+                { 'a', 'x', 'a', 'a', 'a', 'a' },
+                { 'x', 'a', 'a', 'a', 'b', 'c' },
+                { 'a', 'x', 'a', 'a', 'a', 'a' }
+            },
+
+            new char[,]
+            {
+                { 'x', 'x', 'x', 'a', 'x', 'x' },
+                { 'a', 'x', 'a', 'c', 'a', 'c' },
+                { 'x', 'a', 'c', 'a', 'b', 'b' },
+                { 'a', 'x', 'a', 'c', 'a', 'c' }
+            },
+
+            new char[,]
+            {
+                { 'x', 'x', 'x', 'c', 'x', 'x' },
+                { 'a', 'x', 'a', 'a', 'a', 'a' },
+                { 'x', 'c', 'c', 'c', 'b', 'b' },
+                { 'a', 'x', 'a', 'a', 'a', 'a' }
+            },
+
+            new char[,]
+            {
+                { 'x', 'x', 'x', 'a', 'a', 'a'},
+                { 'x', 'x', 'a', 'a', 'b', 'c'},
+                { 'a', 'x', 'a', 'a', 'a', 'a'},
+                { 'x', 'a', 'a', 'a', 'a', 'x'}
+            },
+
+            new char[,]
+            {
+                { 'x', 'x', 'x', 'a', 'c', 'a'},
+                { 'x', 'x', 'a', 'c', 'b', 'b'},
+                { 'c', 'x', 'c', 'a', 'c', 'a'},
+                { 'x', 'c', 'a', 'c', 'a', 'x'}
+            },
+
+            new char[,]
+            {
+                { 'x', 'a', 'a', 'x', 'x' },
+                { 'a', 'b', 'c', 'a', 'x' },
+                { 'a', 'a', 'a', 'a', 'x' },
+                { 'a', 'a', 'a', 'a', 'x' },
+                { 'a', 'x', 'x', 'a', 'x' },
+                { 'a', 'a', 'x', 'a', 'a' }
+            },
+
+            // new char[,]
+            // {
+            //     { 'x', 'x', 'x', 'a', 'a', 'a', 'x', 'x' },
+            //     { 'x', 'x', 'a', 'x', 'x', 'x', 'a', 'x' },
+            //     { 'x', 'a', 'x', 'x', 'x', 'x', 'x', 'x' },
+            //     { 'x', 'a', 'x', 'x', 'a', 'a', 'a', 'x' },
+            //     { 'a', 'x', 'x', 'a', 'x', 'x', 'x', 'a' },
+            //     { 'a', 'x', 'x', 'x', 'a', 'a', 'a', 'x' },
+            //     { 'a', 'x', 'x', 'x', 'x', 'x', 'a', 'x' },
+            //     { 'a', 'x', 'x', 'a', 'x', 'x', 'a', 'x' },
+            //     { 'x', 'a', 'a', 'x', 'a', 'a', 'x', 'x' }
+            // }
+
+            // it's monotone so it won't work
+
+            new char[,]
+            {
+                { 'x', 'x', 'a', 'a', 'a', 'x', 'x' },
+                { 'x', 'a', 'b', 'b', 'c', 'a', 'x' },
+                { 'x', 'a', 'a', 'a', 'a', 'a', 'x' },
+                { 'x', 'a', 'a', 'a', 'a', 'a', 'x' },
+                { 'a', 'x', 'a', 'x', 'a', 'x', 'a' },
+                { 'a', 'x', 'a', 'x', 'a', 'x', 'a' },
+            },
+
+            new char[,]
+            {
+                { 'x', 'x', 'a', 'c', 'a', 'x', 'x' },
+                { 'x', 'a', 'b', 'b', 'b', 'a', 'x' },
+                { 'x', 'a', 'c', 'a', 'c', 'a', 'x' },
+                { 'x', 'a', 'c', 'a', 'c', 'a', 'x' },
+                { 'a', 'x', 'a', 'x', 'a', 'x', 'a' },
+                { 'a', 'x', 'a', 'x', 'a', 'x', 'a' },
+            },
+
+            new char[,]
+            {
+                { 'x', 'x', 'x', 'a', 'x', 'x', 'x' },
+                { 'x', 'x', 'a', 'a', 'a', 'x', 'x' },
+                { 'x', 'a', 'a', 'a', 'a', 'a', 'x' },
+                { 'x', 'a', 'a', 'a', 'a', 'a', 'x' },
+                { 'a', 'a', 'a', 'a', 'a', 'a', 'a' },
+                { 'a', 'a', 'a', 'a', 'b', 'b', 'c' },
+                { 'a', 'a', 'a', 'a', 'a', 'a', 'a' },
+                { 'x', 'a', 'a', 'a', 'a', 'a', 'x' },
+                { 'x', 'x', 'a', 'x', 'a', 'x', 'x' }
+            }
+        ];
+
+        private HashSet<char[,]> allGuys = new HashSet<char[,]>();
 
         private Bitmap alteredBitmap;
 
-        private readonly String _imagePath;
-        private Byte[,] place;
-        private Int32 placeCols;
-        private Int32 placeRows;
-        private List<Int32> palette = new List<Int32>();
-        public Sus(String imagePath)
+        private readonly string _imagePath;
+        private byte[,] place;
+        private int placeCols;
+        private int placeRows;
+        private List<int> palette = new List<int>();
+        public Sus(string imagePath)
         {
             _imagePath = imagePath;
         }
@@ -84,10 +511,10 @@ namespace AmongUsExtractor
             BuildGuyList();
             ParseImage();
 
-            Int32 susGuys = 0;
-            Double pc = 100.0D / allGuys.Count;
-            Double tpc = 0.0D;
-            foreach(Char[,] guy in allGuys)
+            int susGuys = 0;
+            double pc = 100.0D / allGuys.Count;
+            double tpc = 0.0D;
+            foreach(char[,] guy in allGuys)
             {
                 susGuys += ScanForSus(guy);
 
@@ -101,122 +528,137 @@ namespace AmongUsExtractor
 
         private void BuildGuyList()
         {
-            Char[,] guy;
-
-            guy = longSusGuy;
-            for (Int32 i = 0; i < 4; i++)
+            foreach (char[,] guy in susGuys)
             {
-                allGuys.Add(guy);
-                guy = RotateGuyCCW(guy);
-            }
+                char[,] tempGuy;
 
-            guy = MirrorGuy(longSusGuy);
-            for (Int32 i = 0; i < 4; i++)
-            {
-                allGuys.Add(guy);
-                guy = RotateGuyCCW(guy);
-            }
+                tempGuy = guy;
+                for (int i = 0; i < 4; i++)
+                {
+                    allGuys.Add(tempGuy);
+                    tempGuy = RotateGuyCCW(tempGuy);
+                }
+                
+                // symmetry check
+                if (guy != MirrorGuy(guy))
+                {
+                    tempGuy = MirrorGuy(guy);
+                    for (int i = 0; i < 4; i++)
+                    {
+                        allGuys.Add(tempGuy);
+                        tempGuy = RotateGuyCCW(tempGuy);
+                    }
+                }
 
-            guy = altLongSusGuy;
-            for (Int32 i = 0; i < 4; i++)
-            {
-                allGuys.Add(guy);
-                guy = RotateGuyCCW(guy);
-            }
+                // scaling takes why too long and why more resources to find
+                // regardless if we have multi-threading and AOT shit.
+                // also it's completely useless, they are already big enough
+                // to find them manually.
+                // 
+                // it's possible to use them but mathematically speaking
+                // we make 24 total variation of one susGuy.
+                // 32 * 24 = 768 of all possible variance.
+                // this is a big number to consider, it may be okay
+                // if we use lower level language like rust or c++.
+                // right now 256 should be reasonable, as again
+                // to find scaled guy u can use your eyes.
 
-            guy = MirrorGuy(altLongSusGuy);
-            for (Int32 i = 0; i < 4; i++)
-            {
-                allGuys.Add(guy);
-                guy = RotateGuyCCW(guy);
-            }
+                // tempGuy = ScaleGuy(guy, 2);
+                // for (int i = 0; i < 4; i++)
+                // {
+                //     allGuys.Add(tempGuy);
+                //     tempGuy = RotateGuyCCW(tempGuy);
+                // }
+                
+                // if (guy != MirrorGuy(guy))
+                // {
+                //     tempGuy = MirrorGuy(ScaleGuy(guy, 2));
+                //     for (int i = 0; i < 4; i++)
+                //     {
+                //         allGuys.Add(tempGuy);
+                //         tempGuy = RotateGuyCCW(tempGuy);
+                //     }
+                // }
 
-            guy = otherAltLongSusGuy;
-            for (Int32 i = 0; i < 4; i++)
-            {
-                allGuys.Add(guy);
-                guy = RotateGuyCCW(guy);
-            }
+                // tempGuy = ScaleGuy(guy, 3);
+                // for (int i = 0; i < 4; i++)
+                // {
+                //     allGuys.Add(tempGuy);
+                //     tempGuy = RotateGuyCCW(tempGuy);
+                // }
 
-            guy = MirrorGuy(otherAltLongSusGuy);
-            for (Int32 i = 0; i < 4; i++)
-            {
-                allGuys.Add(guy);
-                guy = RotateGuyCCW(guy);
-            }
-
-            guy = shortSusGuy;
-            for(Int32 i = 0; i < 4; i++)
-            {
-                allGuys.Add(guy);
-                guy = RotateGuyCCW(guy);
-            }
-
-            guy = MirrorGuy(shortSusGuy);
-            for (Int32 i = 0; i < 4; i++)
-            {
-                allGuys.Add(guy);
-                guy = RotateGuyCCW(guy);
-            }
-
-            guy = altShortSusGuy;
-            for (Int32 i = 0; i < 4; i++)
-            {
-                allGuys.Add(guy);
-                guy = RotateGuyCCW(guy);
-            }
-
-            guy = MirrorGuy(altShortSusGuy);
-            for (Int32 i = 0; i < 4; i++)
-            {
-                allGuys.Add(guy);
-                guy = RotateGuyCCW(guy);
+                // if (guy != MirrorGuy(guy))
+                // {
+                //     tempGuy = MirrorGuy(ScaleGuy(guy, 3));
+                //     for (int i = 0; i < 4; i++)
+                //     {
+                //         allGuys.Add(tempGuy);
+                //         tempGuy = RotateGuyCCW(tempGuy);
+                //     }
+                // }
             }
         }
 
-        private Dictionary<Tuple<Int32, Int32>, Boolean> foundAt = new Dictionary<Tuple<Int32, Int32>, bool>();
+        private HashSet<Tuple<int, int>> foundAt = new HashSet<Tuple<int, int>>();
 
-        private Int32 ScanForSus(Char[,] sus)
+        private int ScanForSus(char[,] sus)
         {
-            Int32 matches = 0;
-            Int32 rows = sus.GetLength(0);
-            Int32 cols = sus.GetLength(1);
-            for(Int32 row = 0; row < placeRows - rows; row++)
+            int matches = 0;
+            int rows = sus.GetLength(0);
+            int cols = sus.GetLength(1);
+
+            var options = new ParallelOptions 
+            { 
+                MaxDegreeOfParallelism = Environment.ProcessorCount 
+            };
+
+            object lockObj = new object();
+
+            Parallel.For(0, placeRows - rows, options, (row) =>
             {
-                for (Int32 col = 0; col < placeCols - cols; col++)
+                var localMatches = new List<Tuple<int, int>>();
+
+                for (int col = 0; col < placeCols - cols; col++)
                 {
-                    //if (foundAt.ContainsKey(rc) && foundAt[rc] == true)
-                    //    continue;
-
-                    Byte[,] cell = ExtractCell(row, col, rows, cols);
-                    if (CellMatches(cell, sus, rows, cols))
+                    if (CellMatches(ExtractCell(row, col, rows, cols), sus, rows, cols))
                     {
-                        Tuple<Int32, Int32> rc = new Tuple<Int32, Int32>(row, col);
-                        foundAt[rc] = true;
-                        UpdateBitmap(sus, row, col);
-                        matches++;
+                        localMatches.Add(new Tuple<int, int>(row, col));
                     }
-
-                    //foundAt[rc] = false;
                 }
-            }
+
+                if (localMatches.Count > 0)
+                {
+                    lock (lockObj)
+                    {
+                        foreach (var match in localMatches)
+                        {
+                            foundAt.Add(match);
+                            UpdateBitmap(sus, match.Item1, match.Item2);
+                            matches++;
+                        }
+                    }
+                }
+            });
+
             return matches;
         }
 
-        private void UpdateBitmap(Char[,] sus, Int32 ofsRow, Int32 ofsCol)
-        {
-            Int32 rows = sus.GetLength(0);
-            Int32 cols = sus.GetLength(1);
 
-            for (Int32 row = 0; row < rows; row++)
+
+        private void UpdateBitmap(char[,] sus, int ofsRow, int ofsCol)
+        {
+            int rows = sus.GetLength(0);
+            int cols = sus.GetLength(1);
+
+            for (int row = 0; row < rows; row++)
             {
-                for (Int32 col = 0; col < cols; col++)
+                for (int col = 0; col < cols; col++)
                 {
                     if(sus[row, col] != 'x')
                     {
                         Color pixelValue = alteredBitmap.GetPixel(ofsCol + col, ofsRow + row);
-                        Int32 argb = pixelValue.ToArgb();
-                        Byte[] channels = BitConverter.GetBytes(argb);
+                        int argb = pixelValue.ToArgb();
+                        byte[] channels = BitConverter.GetBytes(argb);
                         channels[3] = 0xFF;
 
                         alteredBitmap.SetPixel(ofsCol + col, ofsRow + row, Color.FromArgb(BitConverter.ToInt32(channels)));
@@ -225,15 +667,15 @@ namespace AmongUsExtractor
             }
         }
 
-        private Boolean CellMatches(Byte[,] cell, Char[,] sus, Int32 rows, Int32 cols)
+        private bool CellMatches(byte[,] cell, char[,] sus, int rows, int cols)
         {
-            Dictionary<Char, Byte> dict = new Dictionary<Char, Byte>();
+            Dictionary<char, byte> dict = new Dictionary<char, byte>();
 
-            foreach (Char c in new Char[] { 'a', 'b', 'c', 'x' })
+            foreach (char c in new char[] { 'a', 'b', 'c', 'x' })
             {
-                for (Int32 row = 0; row < rows; row++)
+                for (int row = 0; row < rows; row++)
                 {
-                    for (Int32 col = 0; col < cols; col++)
+                    for (int col = 0; col < cols; col++)
                     {
                         if(sus[row, col] == c)
                         {
@@ -272,12 +714,12 @@ namespace AmongUsExtractor
             return true;
         }
 
-        private Byte[,] ExtractCell(Int32 ofsRow, Int32 ofsCol, Int32 rows, Int32 cols)
+        private byte[,] ExtractCell(int ofsRow, int ofsCol, int rows, int cols)
         {
-            Byte[,] cell = new Byte[rows, cols];
-            for(Int32 row = 0; row < rows; row++)
+            byte[,] cell = new byte[rows, cols];
+            for(int row = 0; row < rows; row++)
             {
-                for(Int32 col = 0; col < cols; col++)
+                for(int col = 0; col < cols; col++)
                 {
                     cell[row, col] = place[ofsRow + row, ofsCol + col];
                 }
@@ -286,14 +728,14 @@ namespace AmongUsExtractor
             return cell;
         }
 
-        private Char[,] RotateGuyCCW(Char[,] guy)
+        private char[,] RotateGuyCCW(char[,] guy)
         {
-            Char[,] newGuy = new Char[guy.GetLength(1), guy.GetLength(0)];
-            Int32 newCol, newRow = 0;
-            for (Int32 oldCol = guy.GetLength(1) - 1; oldCol >= 0; oldCol--)
+            char[,] newGuy = new char[guy.GetLength(1), guy.GetLength(0)];
+            int newCol, newRow = 0;
+            for (int oldCol = guy.GetLength(1) - 1; oldCol >= 0; oldCol--)
             {
                 newCol = 0;
-                for (Int32 oldRow = 0; oldRow < guy.GetLength(0); oldRow++)
+                for (int oldRow = 0; oldRow < guy.GetLength(0); oldRow++)
                 {
                     newGuy[newRow, newCol] = guy[oldRow, oldCol];
                     newCol++;
@@ -304,16 +746,40 @@ namespace AmongUsExtractor
             return newGuy;
         }
 
-        private Char[,] MirrorGuy(Char[,] guy)
+        public char[,] ScaleGuy(char[,] guy, int scaleFactor)
         {
-            Int32 rows = guy.GetLength(0);
-            Int32 cols = guy.GetLength(1);
+            if (scaleFactor <= 0)
+                throw new ArgumentException("Scale factor must be positive", nameof(scaleFactor));
 
-            Char[,] newGuy = new Char[rows, cols];
+            int originalRows = guy.GetLength(0);
+            int originalCols = guy.GetLength(1);
+            int newRows = originalRows * scaleFactor;
+            int newCols = originalCols * scaleFactor;
 
-            for (Int32 row = 0; row < rows; row++)
+            char[,] scaled = new char[newRows, newCols];
+
+            for (int i = 0; i < newRows; i++)
             {
-                for (Int32 col = 0; col < cols; col++)
+                for (int j = 0; j < newCols; j++)
+                {
+                    scaled[i, j] = guy[i / scaleFactor, j / scaleFactor];
+                }
+            }
+
+            return scaled;
+        }
+
+
+        private char[,] MirrorGuy(char[,] guy)
+        {
+            int rows = guy.GetLength(0);
+            int cols = guy.GetLength(1);
+
+            char[,] newGuy = new char[rows, cols];
+
+            for (int row = 0; row < rows; row++)
+            {
+                for (int col = 0; col < cols; col++)
                 {
                     newGuy[rows - 1 - row, col] = guy[row, col];
                 }
@@ -324,20 +790,17 @@ namespace AmongUsExtractor
 
         private void WriteImage()
         {
-            alteredBitmap.Save(@"D:\altered.png");
+            alteredBitmap.Save(Path.Combine(Path.GetDirectoryName(_imagePath), "altered.png"));
 
-            using(FileStream fs = File.OpenWrite(@"D:\locations.csv"))
+            using(FileStream fs = File.OpenWrite(Path.Combine(Path.GetDirectoryName(_imagePath), "locations.csv")))
             {
                 using (TextWriter tw = new StreamWriter(fs))
                 {
                     tw.WriteLine("No, X, Y");
-                    Int32 i = 1;
+                    int i = 1;
                     foreach(var kvp in foundAt)
                     {
-                        if(kvp.Value == true)
-                        {
-                            tw.WriteLine($"{i++}, {kvp.Key.Item2}, {kvp.Key.Item1}");
-                        }
+                        tw.WriteLine($"{i++}, {kvp.Item2}, {kvp.Item1}");
                     }
                 }
             }
@@ -350,29 +813,35 @@ namespace AmongUsExtractor
             {
                 placeCols = bmp.Width;
                 placeRows = bmp.Height;
-                place = new Byte[placeRows, placeCols];
-
+                place = new byte[placeRows, placeCols];
                 alteredBitmap = new Bitmap(bmp.Width, bmp.Height);
 
-                for(Int32 row = 0; row < placeRows; row++)
+                BitmapData bmpData = bmp.LockBits(new Rectangle(0, 0, placeCols, placeRows), ImageLockMode.ReadOnly, bmp.PixelFormat);
+                BitmapData alteredBmpData = alteredBitmap.LockBits(new Rectangle(0, 0, placeCols, placeRows), ImageLockMode.WriteOnly, alteredBitmap.PixelFormat);
+
+                int bytesPerPixel = System.Drawing.Bitmap.GetPixelFormatSize(bmp.PixelFormat) / 8;
+                int byteCount = bmpData.Stride * placeRows;
+                byte[] pixels = new byte[byteCount];
+                byte[] alteredPixels = new byte[byteCount];
+
+                Marshal.Copy(bmpData.Scan0, pixels, 0, byteCount);
+
+                for (int i = 0; i < byteCount; i += bytesPerPixel)
                 {
-                    for(Int32 col = 0; col < placeCols; col++)
-                    {
-                        Color pixel = bmp.GetPixel(col, row);
-                        Int32 pixelValue = pixel.ToArgb();
-                       
-                        if (palette.Contains(pixelValue) == false)
-                            palette.Add(pixelValue);
+                    int pixelValue = BitConverter.ToInt32(pixels, i);
+                    if (!palette.Contains(pixelValue))
+                        palette.Add(pixelValue);
 
-                        Byte paletteIndex = (Byte)palette.IndexOf(pixelValue);
-                        place[row, col] = paletteIndex;
+                    byte paletteIndex = (byte)palette.IndexOf(pixelValue);
+                    place[i / bytesPerPixel / placeCols, (i / bytesPerPixel) % placeCols] = paletteIndex;
 
-                        Byte[] channels = BitConverter.GetBytes(pixelValue);
-                        channels[3] = 0x40;
-
-                        alteredBitmap.SetPixel(col, row, Color.FromArgb(BitConverter.ToInt32(channels)));
-                    }
+                    pixels[i + 3] = 0x20; // Alpha channel
                 }
+
+                Marshal.Copy(pixels, 0, alteredBmpData.Scan0, byteCount);
+
+                bmp.UnlockBits(bmpData);
+                alteredBitmap.UnlockBits(alteredBmpData);
             }
             Console.WriteLine($" {placeCols}x{placeRows} {palette.Count} colours. DONE!");
         }
